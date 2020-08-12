@@ -3,15 +3,16 @@ package user
 import (
 	_ "encoding/json"
 	_ "fmt"
-	_ "io/ioutil"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/trungkien71297/go_api_management/domain/users"
 	"github.com/trungkien71297/go_api_management/services"
+	_ "io/ioutil"
+	"net/http"
+	"strconv"
 )
 
 func GetUsers(c *gin.Context) {
+
 	c.String(http.StatusNotImplemented, "This function is not implemented")
 }
 func CreateUser(c *gin.Context) {
@@ -36,5 +37,19 @@ func CreateUser(c *gin.Context) {
 	}
 }
 func FindUser(c *gin.Context) {
-	c.String(http.StatusNotImplemented, "This function is not implemented")
+	id := c.Param("user_id")
+	userId, parseErr := strconv.ParseInt(id, 10, 64)
+
+	if parseErr != nil {
+		c.JSON(http.StatusConflict, gin.H{"message": "wrong id"})
+	}
+	res, err := services.GetUsers(userId)
+	if res != nil {
+		c.JSON(http.StatusOK, res)
+	}
+
+	if err != nil {
+		c.String(http.StatusNotFound, "Not found")
+	}
+
 }
