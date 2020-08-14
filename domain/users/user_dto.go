@@ -3,18 +3,19 @@ package users
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/trungkien71297/go_api_management/utils/errors"
 )
 
 type User struct {
-	Id          int64  `json:"id"`
-	Username    string `json:"username"`
-	Firstname   string `json:"first_name"`
-	Lastname    string `json:"last_name"`
-	Email       string `json:"email"`
-	Password    string `json:"pwd"`
-	DateCreated string `json:"date_created"`
+	Id          int64     `json:"id"`
+	Username    string    `json:"username"`
+	Firstname   string    `json:"first_name"`
+	Lastname    string    `json:"last_name"`
+	Email       string    `json:"email"`
+	Password    string    `json:"pwd"`
+	DateCreated time.Time `json:"date_created"`
 }
 
 func (user *User) Validate() *errors.RestError {

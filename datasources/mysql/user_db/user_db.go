@@ -19,10 +19,12 @@ const (
 
 var (
 	Client *sql.DB
+
+	err error
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
+	if err = godotenv.Load(); err != nil {
 		panic(err)
 	}
 
@@ -33,10 +35,11 @@ func init() {
 		host     = os.Getenv(mysql_host)
 		schema   = os.Getenv(mysql_schema)
 	)
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", username, password, host, schema)
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=true", username, password, host, schema)
 
 	fmt.Println(dataSourceName)
-	Client, err := sql.Open("mysql", dataSourceName)
+
+	Client, err = sql.Open("mysql", dataSourceName)
 
 	if err != nil {
 		panic(err)
@@ -45,12 +48,8 @@ func init() {
 	if err = Client.Ping(); err != nil {
 		panic(err)
 	}
-	var res sql.Result
-	res, err = Client.Exec(iq2, "U", "a", "y", "s", "sc", "as")
-	if err != nil {
-		fmt.Println("Dc day")
-	}
 
-	_ = res
+	_ = iq2
 	log.Println("Connected to db")
+	fmt.Println(Client.Stats())
 }
