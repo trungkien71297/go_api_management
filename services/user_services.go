@@ -6,7 +6,21 @@ import (
 	"github.com/trungkien71297/go_api_management/utils/errors"
 )
 
-func CreateUser(user users.User) (*users.User, *errors.RestError) {
+var (
+	UserService userServiceInterface = &userService{}
+)
+
+type userServiceInterface interface {
+	GetUser(userId int64) (*users.User, *errors.RestError)
+	CreateUser(user users.User) (*users.User, *errors.RestError)
+	GetAllUsers() ([]*users.User, *errors.RestError)
+	DeleteUser(userId int64) (bool, *errors.RestError)
+	EditUser(user *users.User) (*users.User, *errors.RestError)
+}
+
+type userService struct{}
+
+func (s *userService) CreateUser(user users.User) (*users.User, *errors.RestError) {
 
 	if err := user.Validate(); err != nil {
 		return nil, err
@@ -19,7 +33,7 @@ func CreateUser(user users.User) (*users.User, *errors.RestError) {
 	return &user, nil
 }
 
-func GetUser(userId int64) (*users.User, *errors.RestError) {
+func (s *userService) GetUser(userId int64) (*users.User, *errors.RestError) {
 
 	res, err := users.Get(userId)
 	if err != nil {
@@ -30,7 +44,7 @@ func GetUser(userId int64) (*users.User, *errors.RestError) {
 
 }
 
-func GetAllUsers() ([]*users.User, *errors.RestError) {
+func (s *userService) GetAllUsers() ([]*users.User, *errors.RestError) {
 	res, err := users.GetAllUser()
 	if err != nil {
 		return nil, err
@@ -38,7 +52,7 @@ func GetAllUsers() ([]*users.User, *errors.RestError) {
 	return res, nil
 }
 
-func DeleteUser(userId int64) (bool, *errors.RestError) {
+func (s *userService) DeleteUser(userId int64) (bool, *errors.RestError) {
 	u := users.User{Id: userId}
 	res, err := u.DeletetUser()
 	if err != nil {
@@ -47,7 +61,7 @@ func DeleteUser(userId int64) (bool, *errors.RestError) {
 	return res, nil
 }
 
-func EditUser(user *users.User) (*users.User, *errors.RestError) {
+func (s *userService) EditUser(user *users.User) (*users.User, *errors.RestError) {
 	res, err := user.EditUser()
 	if err != nil {
 		//TODO error edit

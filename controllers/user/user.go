@@ -3,12 +3,13 @@ package user
 import (
 	_ "encoding/json"
 	_ "fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/trungkien71297/go_api_management/domain/users"
-	"github.com/trungkien71297/go_api_management/services"
 	_ "io/ioutil"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/trungkien71297/go_api_management/domain/users"
+	"github.com/trungkien71297/go_api_management/services"
 )
 
 func GetUsers(c *gin.Context) {
@@ -21,13 +22,10 @@ func CreateUser(c *gin.Context) {
 	if err := c.ShouldBindJSON(&s); err != nil {
 		c.String(http.StatusNonAuthoritativeInfo, "Chicharito")
 	}
-	res, err := services.CreateUser(s)
+	res, err := services.UserService.CreateUser(s)
 
 	if res != nil {
-		c.JSON(http.StatusCreated, gin.H{
-			"status":   "OK",
-			"username": res.Username,
-		})
+		c.JSON(http.StatusCreated, res.Marshall(c.GetHeader("X-Public") == "true"))
 		return
 	}
 
@@ -43,9 +41,9 @@ func FindUser(c *gin.Context) {
 	if parseErr != nil {
 		c.JSON(http.StatusConflict, gin.H{"message": "wrong id"})
 	}
-	res, err := services.GetUser(userId)
+	res, err := services.UserService.GetUser(userId)
 	if res != nil {
-		c.JSON(http.StatusOK, res)
+		c.JSON(http.StatusOK, res.Marshall(c.GetHeader("X-Public") == "true"))
 	}
 
 	if err != nil {
@@ -55,13 +53,19 @@ func FindUser(c *gin.Context) {
 }
 
 func GetAll(c *gin.Context) {
-	res, err := services.GetAllUsers()
+	res, err := services.UserService.GetAllUsers()
 	if err != nil {
 		c.String(http.StatusNotFound, "Not found")
 	}
 
 	if res != nil {
-		c.JSON(http.StatusOK, res)
+
+		result := make([]interface{}, len(res))
+
+		for index, user := range res {
+			result[index] = user.Marshall(c.GetHeader("X-Public") == "true")
+		}
+		c.JSON(http.StatusOK, result)
 	}
 }
 
@@ -78,7 +82,7 @@ func EditUser(c *gin.Context) {
 	}
 	s.Id = userId
 
-	res, err := services.EditUser(&s)
+	res, err := services.UserService.EditUser(&s)
 
 	if err != nil {
 	}
@@ -97,7 +101,7 @@ func DeleteUser(c *gin.Context) {
 	if parseErr != nil {
 		c.JSON(http.StatusConflict, gin.H{"message": "wrong id"})
 	}
-	res, err := services.DeleteUser(userId)
+	res, err := services.UserService.DeleteUser(userId)
 	if err != nil {
 		c.String(http.StatusExpectationFailed, "Error")
 	}
