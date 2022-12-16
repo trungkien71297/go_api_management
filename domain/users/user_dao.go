@@ -1,10 +1,11 @@
 package users
 
 import (
-	"github.com/trungkien71297/go_api_management/datasources/mysql/user_db"
-	"github.com/trungkien71297/go_api_management/utils/errors"
 	"log"
 	"time"
+
+	"go_api_management/datasources/mysql/user_db"
+	"go_api_management/utils/errors"
 )
 
 const (

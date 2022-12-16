@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/trungkien71297/go_api_management/utils/errors"
+	"go_api_management/utils/errors"
 )
 
 type User struct {
@@ -19,7 +19,6 @@ type User struct {
 }
 
 func (user *User) Validate() *errors.RestError {
-	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
 	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
 
 	var err errors.RestError

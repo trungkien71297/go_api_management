@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
+	"go_api_management/app"
 	"time"
-
-	"github.com/trungkien71297/go_api_management/app"
 )
 
 func main() {

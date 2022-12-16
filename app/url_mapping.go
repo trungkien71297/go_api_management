@@ -1,16 +1,29 @@
 package app
 
 import (
-	"github.com/trungkien71297/go_api_management/controllers/ping"
-	"github.com/trungkien71297/go_api_management/controllers/user"
+	"go_api_management/controllers/country"
+	"go_api_management/controllers/ping"
+	"go_api_management/controllers/user"
 )
 
 func mapUrls() {
-	router.GET("/ping", ping.Ping)
 
-	router.GET("/user/:user_id", user.FindUser)
-	router.POST("/user", user.CreateUser)
-	router.PUT("/user/:user_id", user.EditUser)
-	router.DELETE("/user/:user_id", user.DeleteUser)
-	router.GET("/users", user.GetAll)
+	public.GET("/ping", ping.Ping)
+	//auth
+	public.POST("/login", nil)
+	public.POST("/register", nil)
+
+	//user
+	private.GET("/user/:user_id", user.FindUser)
+	private.POST("/user", user.CreateUser)
+	private.PUT("/user/:user_id", user.EditUser)
+	private.DELETE("/user/:user_id", user.DeleteUser)
+	private.GET("/users", user.GetAll)
+
+	//country
+	public.GET("/countries/", country.GetCountries)
+	public.GET("/country/:country_id", country.GetCountry)
+	private.POST("/country", country.AddCountry)
+	private.PUT("/country/:country_id", country.EditCountry)
+	private.DELETE("/country/:country_id", country.DeleteCountry)
 }

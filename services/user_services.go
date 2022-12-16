@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/trungkien71297/go_api_management/domain/users"
-	"github.com/trungkien71297/go_api_management/utils"
-	"github.com/trungkien71297/go_api_management/utils/errors"
+	"go_api_management/domain/users"
+	"go_api_management/utils"
+	"go_api_management/utils/errors"
 )
 
 var (

@@ -7,13 +7,13 @@ import (
 	"net/http"
 	"strconv"
 
+	"go_api_management/domain/users"
+	"go_api_management/services"
+
 	"github.com/gin-gonic/gin"
-	"github.com/trungkien71297/go_api_management/domain/users"
-	"github.com/trungkien71297/go_api_management/services"
 )
 
 func GetUsers(c *gin.Context) {
-
 	c.String(http.StatusNotImplemented, "This function is not implemented")
 }
 func CreateUser(c *gin.Context) {
@@ -25,7 +25,7 @@ func CreateUser(c *gin.Context) {
 	res, err := services.UserService.CreateUser(s)
 
 	if res != nil {
-		c.JSON(http.StatusCreated, res.Marshall(c.GetHeader("X-Public") == "true"))
+		c.JSON(http.StatusCreated, res.Marshall(true))
 		return
 	}
 

@@ -1,12 +1,15 @@
 package app
 
 import (
+	"go_api_management/logger"
+
 	"github.com/gin-gonic/gin"
-	"github.com/trungkien71297/go_api_management/logger"
 )
 
 var (
-	router = gin.Default()
+	router  = gin.Default()
+	public  = router.Group("/api")
+	private = router.Group("/api")
 )
 
 func StartApplication() {
