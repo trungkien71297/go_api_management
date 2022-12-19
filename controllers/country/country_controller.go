@@ -1,4 +1,4 @@
-package country
+package country_controller
 
 import (
 	"go_api_management/services"
